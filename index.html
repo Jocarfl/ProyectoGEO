@@ -105,7 +105,7 @@
 	<div id="map"></div>
 
 	<script>
-		var map = L.map('map', {center: [39.9233, -0.6139],zoom: 15, zoomControl:false});
+		var map = L.map('map', {center: [38.972, -0.303],zoom: 12, zoomControl:false});
 		var inicial = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 		var zoomHome = L.Control.zoomHome();
 			zoomHome.addTo(map);
@@ -118,23 +118,19 @@
 			continuousWorld : true,
 			attribution: ' <a href="http://www.catastro.meh.es/" target="_blank">DirecciÃ³n General del Catastro</a>'
 		});
+
 		//Topografico
 		var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {maxZoom: 17,
 			attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 		});
 		// Campos de Oliveras
 
-		var Campo1 = new L.Shapefile('OLIVERAS1.zip',{
+		var Campo1 = new L.Shapefile('Corine_incendio_shp.zip',{
 			onEachFeature: function(feature,marker) {
-			marker.bindPopup("<h3>Arbol número:" +feature.properties.Cod_Arbol+"</h3><i><b>Diametro:</b>"+feature.properties.Avg_CHM+" m <br><b>Area:</b>"
-			+feature.properties.Shape_Area+" m2<br><b> Perímetro:"+feature.properties.Shape_Leng+" m <b><br><b>Número Ptos. Lidar:"+feature.properties.Count_+"</i><b>");
+		   marker.bindPopup("<h3>Area en ha: " +feature.properties.AREA_HA+"</h3><i><b>Descripcion:</b>"+feature.properties.DESC_+"<br><b>Area:</b>"
+			+feature.properties.Shape_Area+" m2<br><b> Perímetro:"+feature.properties.Shape_Leng + "m");
 		}});
 
-		var Campo2 = new L.Shapefile('OLIVERAS2.zip',{
-			onEachFeature: function(feature,marker) {
-			marker.bindPopup("<h3>Arbol número:" +feature.properties.Cod_Arbol+"</h3><i><b>Diametro:</b>"+feature.properties.Avg_CHM+" m <br><b>Area:</b>"
-			+feature.properties.AREA+" m2<br><b> Perímetro:"+feature.properties.PERIMETRO+" m <b><br><b>Número Ptos. Lidar:"+feature.properties.Count_+"</i><b>");
-		}});
 
 		// Menu de capas
 		var baseMaps = [{
@@ -158,10 +154,9 @@
 		}];
 
 		var overlays = [{
-		groupName : "Oliveras",
+		groupName : "Incendios(shp)",
 		layers : {
-			"Campo 1" : Campo1,
-			"Campo 2": Campo2
+			"Incendio 1" : Campo1,
 			}
 		}];
 
