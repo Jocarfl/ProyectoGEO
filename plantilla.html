@@ -1,163 +1,228 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
 	<title>Control de capas personalizado</title>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
 	<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
 
-<!-- Plugin para Estilos Control de Capas -->
-	<link rel="stylesheet" href="Plugins/styledLayerControl.css"/>
+	<!-- Plugin para Estilos Control de Capas -->
+	<link rel="stylesheet" href="Plugins/styledLayerControl.css" />
 	<script src="Plugins/styledLayerControl.js"></script>
 
-<!-- Estilos css -->
-	<link rel="stylesheet" href="Plugins/oliveras_MOD.css"/>
+	<!-- Estilos css -->
+	<link rel="stylesheet" href="Plugins/oliveras_MOD.css" />
 
-<!-- Plugin para Medición areas y distancias-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.3.2/leaflet.draw.css" >
+	<!-- Plugin para Medición areas y distancias-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.3.2/leaflet.draw.css">
 	<link rel="stylesheet" href="Plugins/leaflet-measure_files/leaflet-measure.css">
 	<script src="Plugins/leaflet-measure.js"></script>
 
-<!-- Plugin para zoom ventana-->
+	<!-- Plugin para zoom ventana-->
 	<script src="Plugins/leaflet-control-boxzoom.js"></script>
 	<link rel="stylesheet" href="Plugins/leaflet-control-boxzoom.css" />
 
-<!-- Plugin para zoom casa-->
-	<link rel="stylesheet" href="Plugins/leaflet.zoomhome.css"/>
+	<!-- Plugin para zoom casa-->
+	<link rel="stylesheet" href="Plugins/leaflet.zoomhome.css" />
 	<script src="Plugins/leaflet.zoomhome.min.js"></script>
 
-<!-- Plugin para Impresión -->
-	 <link href='http://fonts.googleapis.com/css?family=Lato:900,300' rel='stylesheet' type='text/css'>
+	<!-- Plugin para Impresión -->
+	<link href='http://fonts.googleapis.com/css?family=Lato:900,300' rel='stylesheet' type='text/css'>
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
 	<!-- Custom fonts for this theme -->
 	<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 
-    <script src="https://npmcdn.com/geotiff@0.3.6/dist/geotiff.js"></script>
+	<script src="https://npmcdn.com/geotiff@0.3.6/dist/geotiff.js"></script>
 
-    <!-- Plugin -->
-    <script src="https://ihcantabria.github.io/Leaflet.CanvasLayer.Field/dist/leaflet.canvaslayer.field.js"></script>
+	<!-- Plugin -->
+	<script src="https://ihcantabria.github.io/Leaflet.CanvasLayer.Field/dist/leaflet.canvaslayer.field.js"></script>
 
 	<!-- Theme CSS -->
 	<link href="css/freelancer.min.css" rel="stylesheet">
 
 
-<!-- Leaflet Minimapa -->
+	<!-- Leaflet Minimapa -->
 	<link rel="stylesheet" href="Plugins/L.Control.MousePosition.css" />
 	<link rel="stylesheet" href="Plugins/Control.MiniMap.css" />
 	<script src="Plugins/L.Control.MousePosition.js" type="text/javascript"></script>
 	<script src="Plugins/Control.MiniMap.js" type="text/javascript"></script>
 	<style>
-		html, #mapa {
-			height:100%;
+		html,
+		#mapa {
+			height: 100%;
 		}
+
 		.leaflet-popup-content {
 			text-align: center;
-			background:White;
+			background: White;
 		}
-		.leaflet-popup-content-wrapper{
-			background:Grey;
+
+		.leaflet-popup-content-wrapper {
+			background: Grey;
 		}
+
 		.leaflet-popup-tip {
-			background:red;
+			background: red;
 		}
 	</style>
 </head>
-	<body id="page-top">
 
-	  <!-- Navigation -->
-	  <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
-	    <div class="container">
-	      <a class="navbar-brand js-scroll-trigger" href="#page-top">Mapa Incendios  </a>
-	      <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-	        Menu
-	        <i class="fas fa-bars"></i>
-	      </button>
-	      <div class="collapse navbar-collapse" id="navbarResponsive">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item mx-0 mx-lg-1">
-	            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#page-top">Mapa</a>
-	          </li>
-	          <li class="nav-item mx-0 mx-lg-1">
-	            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Descripcion</a>
-	          </li>
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
+<body id="page-top">
 
-		<!-- Masthead -->
-	  <header class="jumbotron jumbotron-fluid">
-	  </header>
-
-
-    <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
-      <script src="https://d3js.org/d3.v4.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js"></script>
-      <!-- Plugin -->
-      <div id="mapa"> </div>
-
-			<script src="js/mapaTIFF.js"></script>
-      <script>
-
-
-			var mapaTif = new MapaTif();
-
-			mapaTif.inicializar('mapa');
-
-
-      </script>
-
-<div style="text-align: right;position: fixed;z-index:9999999;bottom: 0;width: auto;right: 1%;cursor: pointer;line-height: 0;display:block !important;"></div>
-
-<!-- About Section -->
-<section class="page-section bg-primary text-white mb-0" id="about">
-	<div class="container">
-
-		<!-- About Section Heading -->
-		<h2 class="page-section-heading text-center text-uppercase text-white">Descripcion</h2>
-
-		<!-- Icon Divider -->
-		<div class="divider-custom divider-light">
-			<div class="divider-custom-line"></div>
-			<div class="divider-custom-icon">
-				<i class="fas fa-star"></i>
-			</div>
-			<div class="divider-custom-line"></div>
-		</div>
-
-		<!-- About Section Content -->
-		<div class="row">
-			<div class="col-lg-4 ml-auto">
-				<p class="lead"> Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p>
-			</div>
-			<div class="col-lg-4 mr-auto">
-				<p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p>
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+		<div class="container">
+			<a class="navbar-brand js-scroll-trigger" href="#page-top">Mapa Incendios </a>
+			<button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+				Menu
+				<i class="fas fa-bars"></i>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item mx-0 mx-lg-1">
+						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#page-top">Mapa</a>
+					</li>
+					<li class="nav-item mx-0 mx-lg-1">
+						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Descripcion</a>
+					</li>
+					<li>
+						<button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" onclick="myFunction()">MapaCombinacion</button>
+					</li>
+				</ul>
 			</div>
 		</div>
+	</nav>
+	<script>
+		function myFunction() {
+			var x = document.getElementById("mapa");
+			var r = true;
+			if (r == true) {
+				document.getElementById("mapa").remove();
+				var iDiv = document.createElement('div');
+				iDiv.id = 'mapa';
+				document.getElementsByTagName('body')[0].appendChild(iDiv);
+			} else {
+				x.style.display = "none";
+			}
+		}
+	</script>
+
+	<!-- Masthead -->
+	<header class="jumbotron jumbotron-fluid">
+	</header>
+	<script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js"></script>
+	<!-- Plugin -->
+
+	<script src="js/mapaTIFF.js"></script>
+	<div id="mapa"> </div>
+	<script>
+		
+		var mapaTif = new MapaTif();
+		mapaTif.inicializarInc('mapa');
+	</script>
 
 
-	</div>
-</section>
+	<div style="text-align: right;position: fixed;z-index:9999999;bottom: 0;width: auto;right: 1%;cursor: pointer;line-height: 0;display:block !important;"></div>
 
-<!-- Bootstrap core JavaScript -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- About Section -->
+	<section class="page-section bg-primary text-white mb-0" id="about">
+		<div class="container">
 
-<!-- Plugin JavaScript -->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+			<!-- About Section Heading -->
+			<h2 class="page-section-heading text-center text-uppercase text-white">Descripcion</h2>
 
-<!-- Contact Form JavaScript -->
-<script src="js/jqBootstrapValidation.js"></script>
-<script src="js/contact_me.js"></script>
+			<!-- Icon Divider -->
+			<div class="divider-custom divider-light">
+				<div class="divider-custom-line"></div>
+				<div class="divider-custom-icon">
+					<i class="fas fa-star"></i>
+				</div>
+				<div class="divider-custom-line"></div>
+			</div>
 
-<!-- Custom scripts for this template -->
-<script src="js/freelancer.min.js"></script>
+			<!-- About Section Content -->
+			<div class="row">
+				<div class="col-lg-4 ml-auto">
+					<p class="lead"> Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p>
+				</div>
+				<div class="col-lg-4 mr-auto">
+					<p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p>
+				</div>
+			</div>
 
 
-<script>function getCookie(t){for(var e=t+"=",n=decodeURIComponent(document.cookie).split(";"),o=0;o<n.length;o++){for(var i=n[o];" "==i.charAt(0);)i=i.substring(1);if(0==i.indexOf(e))return i.substring(e.length,i.length)}return""}getCookie("hostinger")&&(document.cookie="hostinger=;expires=Thu, 01 Jan 1970 00:00:01 GMT;",location.reload());var wordpressAdminBody=document.getElementsByClassName("wp-admin")[0],notification=document.getElementsByClassName("notice notice-success is-dismissible"),hostingerLogo=document.getElementsByClassName("hlogo"),mainContent=document.getElementsByClassName("notice_content")[0];if(null!=wordpressAdminBody&&notification.length>0&&null!=mainContent){var googleFont=document.createElement("link");googleFontHref=document.createAttribute("href"),googleFontRel=document.createAttribute("rel"),googleFontHref.value="https://fonts.googleapis.com/css?family=Roboto:300,400,600",googleFontRel.value="stylesheet",googleFont.setAttributeNode(googleFontHref),googleFont.setAttributeNode(googleFontRel);var css="@media only screen and (max-width: 576px) {#main_content {max-width: 320px !important;} #main_content h1 {font-size: 30px !important;} #main_content h2 {font-size: 40px !important; margin: 20px 0 !important;} #main_content p {font-size: 14px !important;} #main_content .content-wrapper {text-align: center !important;}} @media only screen and (max-width: 781px) {#main_content {margin: auto; justify-content: center; max-width: 445px;}} @media only screen and (max-width: 1325px) {.web-hosting-90-off-image-wrapper {position: absolute; max-width: 95% !important;} .notice_content {justify-content: center;} .web-hosting-90-off-image {opacity: 0.3;}} @media only screen and (min-width: 769px) {.notice_content {justify-content: space-between;} #main_content {margin-left: 5%; max-width: 445px;} .web-hosting-90-off-image-wrapper {position: absolute; right: 0; display: flex; padding: 0 5%}} .web-hosting-90-off-image {max-width: 90%; margin-top: 20px;} .content-wrapper {z-index: 5} .notice_content {display: flex; align-items: center;} * {-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;} .upgrade_button_red_sale{box-shadow: 0 2px 4px 0 rgba(255, 69, 70, 0.2); max-width: 350px; border: 0; border-radius: 3px; background-color: #ff4546 !important; padding: 15px 55px !important;  margin-bottom: 48px; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 600; color: #ffffff;} .upgrade_button_red_sale:hover{color: #ffffff !important; background: #d10303 !important;}",style=document.createElement("style"),sheet=window.document.styleSheets[0];style.styleSheet?style.styleSheet.cssText=css:style.appendChild(document.createTextNode(css)),document.getElementsByTagName("head")[0].appendChild(style),document.getElementsByTagName("head")[0].appendChild(googleFont);var button=document.getElementsByClassName("upgrade_button_red")[0],link=button.parentElement;link.setAttribute("href","https://www.hostinger.com/hosting-starter-offer?utm_source=000webhost&utm_medium=panel&utm_campaign=000-wp"),link.innerHTML='<button class="upgrade_button_red_sale">TRANSFER NOW</button>',(notification=notification[0]).setAttribute("style","padding-bottom: 0; padding-top: 5px; background: url(https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-bg.jpg); background-size: cover; background-repeat: no-repeat; color: #ffffff; border-color: #ff123a; border-width: 8px;"),notification.className="notice notice-error is-dismissible";var mainContentHolder=document.getElementById("main_content");mainContentHolder.setAttribute("style","padding: 0;"),hostingerLogo[0].remove();var h1Tag=notification.getElementsByTagName("H1")[0];h1Tag.className="000-h1",h1Tag.innerHTML="Cyber Monday Sale",h1Tag.setAttribute("style",'color: white;  margin-top: 48px; font-family: "Roboto", sans-serif; font-size: 48px; font-weight: 600;');var h2Tag=document.createElement("H2");h2Tag.innerHTML="Get 90% Off!",h2Tag.setAttribute("style",'color: white; margin: 45px 0; font-family: "Roboto", sans-serif; font-size: 80px; font-weight: 600;'),h1Tag.parentNode.insertBefore(h2Tag,h1Tag.nextSibling);var paragraph=notification.getElementsByTagName("p")[0];paragraph.innerHTML="Don’t miss the opportunity to enjoy up to <strong>4x WordPress Speed, Free SSL and all premium features</strong> available for a fraction of the price!",paragraph.setAttribute("style",'font-family: "Roboto", sans-serif; font-size: 18px; font-weight: 300;');var list=notification.getElementsByTagName("UL")[0];list.remove();var org_html=mainContent.innerHTML,new_html='<div class="content-wrapper">'+mainContent.innerHTML+'</div><div class="web-hosting-90-off-image-wrapper"><img class="web-hosting-90-off-image" src="https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-img.png"></div>';mainContent.innerHTML=new_html;var saleImage=mainContent.getElementsByClassName("web-hosting-90-off-image")[0]}</script></body>
+		</div>
+	</section>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Plugin JavaScript -->
+	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Contact Form JavaScript -->
+	<script src="js/jqBootstrapValidation.js"></script>
+	<script src="js/contact_me.js"></script>
+
+	<!-- Custom scripts for this template -->
+	<script src="js/freelancer.min.js"></script>
+
+
+	<script>
+		function getCookie(t) {
+			for (var e = t + "=", n = decodeURIComponent(document.cookie).split(";"), o = 0; o < n.length; o++) {
+				for (var i = n[o];
+					" " == i.charAt(0);) i = i.substring(1);
+				if (0 == i.indexOf(e)) return i.substring(e.length, i.length)
+			}
+			return ""
+		}
+		getCookie("hostinger") && (document.cookie = "hostinger=;expires=Thu, 01 Jan 1970 00:00:01 GMT;", location.reload());
+		var wordpressAdminBody = document.getElementsByClassName("wp-admin")[0],
+			notification = document.getElementsByClassName("notice notice-success is-dismissible"),
+			hostingerLogo = document.getElementsByClassName("hlogo"),
+			mainContent = document.getElementsByClassName("notice_content")[0];
+		if (null != wordpressAdminBody && notification.length > 0 && null != mainContent) {
+			var googleFont = document.createElement("link");
+			googleFontHref = document.createAttribute("href"), googleFontRel = document.createAttribute("rel"), googleFontHref.value = "https://fonts.googleapis.com/css?family=Roboto:300,400,600", googleFontRel.value = "stylesheet", googleFont
+				.setAttributeNode(googleFontHref), googleFont.setAttributeNode(googleFontRel);
+			var css =
+				"@media only screen and (max-width: 576px) {#main_content {max-width: 320px !important;} #main_content h1 {font-size: 30px !important;} #main_content h2 {font-size: 40px !important; margin: 20px 0 !important;} #main_content p {font-size: 14px !important;} #main_content .content-wrapper {text-align: center !important;}} @media only screen and (max-width: 781px) {#main_content {margin: auto; justify-content: center; max-width: 445px;}} @media only screen and (max-width: 1325px) {.web-hosting-90-off-image-wrapper {position: absolute; max-width: 95% !important;} .notice_content {justify-content: center;} .web-hosting-90-off-image {opacity: 0.3;}} @media only screen and (min-width: 769px) {.notice_content {justify-content: space-between;} #main_content {margin-left: 5%; max-width: 445px;} .web-hosting-90-off-image-wrapper {position: absolute; right: 0; display: flex; padding: 0 5%}} .web-hosting-90-off-image {max-width: 90%; margin-top: 20px;} .content-wrapper {z-index: 5} .notice_content {display: flex; align-items: center;} * {-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;} .upgrade_button_red_sale{box-shadow: 0 2px 4px 0 rgba(255, 69, 70, 0.2); max-width: 350px; border: 0; border-radius: 3px; background-color: #ff4546 !important; padding: 15px 55px !important;  margin-bottom: 48px; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 600; color: #ffffff;} .upgrade_button_red_sale:hover{color: #ffffff !important; background: #d10303 !important;}",
+				style = document.createElement("style"),
+				sheet = window.document.styleSheets[0];
+			style.styleSheet ? style.styleSheet.cssText = css : style.appendChild(document.createTextNode(css)), document.getElementsByTagName("head")[0].appendChild(style), document.getElementsByTagName("head")[0].appendChild(googleFont);
+			var button = document.getElementsByClassName("upgrade_button_red")[0],
+				link = button.parentElement;
+			link.setAttribute("href", "https://www.hostinger.com/hosting-starter-offer?utm_source=000webhost&utm_medium=panel&utm_campaign=000-wp"), link.innerHTML = '<button class="upgrade_button_red_sale">TRANSFER NOW</button>', (notification =
+				notification[0]).setAttribute("style",
+				"padding-bottom: 0; padding-top: 5px; background: url(https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-bg.jpg); background-size: cover; background-repeat: no-repeat; color: #ffffff; border-color: #ff123a; border-width: 8px;"
+				), notification.className = "notice notice-error is-dismissible";
+			var mainContentHolder = document.getElementById("main_content");
+			mainContentHolder.setAttribute("style", "padding: 0;"), hostingerLogo[0].remove();
+			var h1Tag = notification.getElementsByTagName("H1")[0];
+			h1Tag.className = "000-h1", h1Tag.innerHTML = "Cyber Monday Sale", h1Tag.setAttribute("style", 'color: white;  margin-top: 48px; font-family: "Roboto", sans-serif; font-size: 48px; font-weight: 600;');
+			var h2Tag = document.createElement("H2");
+			h2Tag.innerHTML = "Get 90% Off!", h2Tag.setAttribute("style", 'color: white; margin: 45px 0; font-family: "Roboto", sans-serif; font-size: 80px; font-weight: 600;'), h1Tag.parentNode.insertBefore(h2Tag, h1Tag.nextSibling);
+			var paragraph = notification.getElementsByTagName("p")[0];
+			paragraph.innerHTML = "Don’t miss the opportunity to enjoy up to <strong>4x WordPress Speed, Free SSL and all premium features</strong> available for a fraction of the price!", paragraph.setAttribute("style",
+				'font-family: "Roboto", sans-serif; font-size: 18px; font-weight: 300;');
+			var list = notification.getElementsByTagName("UL")[0];
+			list.remove();
+			var org_html = mainContent.innerHTML,
+				new_html = '<div class="content-wrapper">' + mainContent.innerHTML +
+				'</div><div class="web-hosting-90-off-image-wrapper"><img class="web-hosting-90-off-image" src="https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-img.png"></div>';
+			mainContent.innerHTML = new_html;
+			var saleImage = mainContent.getElementsByClassName("web-hosting-90-off-image")[0]
+		}
+	</script>
+</body>
 
 <!-- Footer -->
 <footer class="footer text-center">
