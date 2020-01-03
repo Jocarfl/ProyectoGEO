@@ -90,24 +90,42 @@
 						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Descripcion</a>
 					</li>
 					<li>
-						<button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" onclick="myFunction()">MapaCombinacion</button>
+						<button class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" id="cambiarCapa" onclick="ponerCapaCombine()">cambiarCapa</button>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 	<script>
-		function myFunction() {
+
+		function ponerCapaIncendio() {
+			console.log("Capa Incendio");
 			var x = document.getElementById("mapa");
-			var r = true;
-			if (r == true) {
-				document.getElementById("mapa").remove();
-				var iDiv = document.createElement('div');
-				iDiv.id = 'mapa';
-				document.getElementsByTagName('body')[0].appendChild(iDiv);
-			} else {
-				x.style.display = "none";
-			}
+			document.getElementById("mapa").remove();
+			var iDiv = document.createElement('div');
+			iDiv.id = 'mapa';
+			var parentDiv = document.getElementById("divMapa").parentNode;
+			var sp2 = document.getElementById("divMapa");
+			parentDiv.insertBefore(iDiv, sp2);
+			var mapaTif = new MapaTif();
+			mapaTif.inicializarInc('mapa')
+
+			document.getElementById( "cambiarCapa" ).setAttribute( "onClick", "javascript: ponerCapaCombine();" );
+		}
+
+		function ponerCapaCombine() {
+			console.log("Capa combine");
+			var x = document.getElementById("mapa");
+			document.getElementById("mapa").remove();
+			var iDiv = document.createElement('div');
+			iDiv.id = 'mapa';
+			var parentDiv = document.getElementById("divMapa").parentNode;
+			var sp2 = document.getElementById("divMapa");
+			parentDiv.insertBefore(iDiv, sp2);
+			var mapaTif = new MapaTif();
+			mapaTif.inicializarComb('mapa')
+
+			document.getElementById( "cambiarCapa" ).setAttribute( "onClick", "javascript: ponerCapaIncendio();" );
 		}
 	</script>
 
@@ -120,9 +138,12 @@
 	<!-- Plugin -->
 
 	<script src="js/mapaTIFF.js"></script>
+	<div id="divMapa">
+	</div>
+
 	<div id="mapa"> </div>
+
 	<script>
-		
 		var mapaTif = new MapaTif();
 		mapaTif.inicializarInc('mapa');
 	</script>
@@ -203,7 +224,7 @@
 			link.setAttribute("href", "https://www.hostinger.com/hosting-starter-offer?utm_source=000webhost&utm_medium=panel&utm_campaign=000-wp"), link.innerHTML = '<button class="upgrade_button_red_sale">TRANSFER NOW</button>', (notification =
 				notification[0]).setAttribute("style",
 				"padding-bottom: 0; padding-top: 5px; background: url(https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-bg.jpg); background-size: cover; background-repeat: no-repeat; color: #ffffff; border-color: #ff123a; border-width: 8px;"
-				), notification.className = "notice notice-error is-dismissible";
+			), notification.className = "notice notice-error is-dismissible";
 			var mainContentHolder = document.getElementById("main_content");
 			mainContentHolder.setAttribute("style", "padding: 0;"), hostingerLogo[0].remove();
 			var h1Tag = notification.getElementsByTagName("H1")[0];
