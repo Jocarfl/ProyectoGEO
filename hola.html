@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Control de capas personalizado</title>
+<!-- Plugin para Leaflet -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+
+<!-- Plugin para Estilos Control de Capas -->
+	<link rel="stylesheet" href="Plugins/styledLayerControl.css"/>
+	<script src="Plugins/styledLayerControl.js"></script>
+
+<!-- Estilos css -->
+	<link rel="stylesheet" href="Plugins/oliveras_MOD.css"/>
+
+<!-- Plugin para Medición areas y distancias-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.3.2/leaflet.draw.css" >
+	<link rel="stylesheet" href="Plugins/leaflet-measure_files/leaflet-measure.css">
+
+<!-- Plugin para zoom ventana-->
+	<script src="Plugins/leaflet-control-boxzoom.js"></script>
+	<link rel="stylesheet" href="Plugins/leaflet-control-boxzoom.css" />
+
+<!-- Plugin para zoom casa-->
+	<link rel="stylesheet" href="Plugins/leaflet.zoomhome.css"/>
+	<script src="Plugins/leaflet.zoomhome.min.js"></script>
+
+<!-- Plugin para Impresión -->
+	 <link href='http://fonts.googleapis.com/css?family=Lato:900,300' rel='stylesheet' type='text/css'>
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- Leaflet Minimapa -->
+	<link rel="stylesheet" href="Plugins/L.Control.MousePosition.css" />
+	<link rel="stylesheet" href="Plugins/Control.MiniMap.css" />
+	<script src="Plugins/L.Control.MousePosition.js" type="text/javascript"></script>
+	<script src="Plugins/Control.MiniMap.js" type="text/javascript"></script>
+	<style>
+		html, #map {
+			height:100%;
+		}
+		.leaflet-popup-content {
+			text-align: center;
+			background:White;
+		}
+		.leaflet-popup-content-wrapper{
+			background:Grey;
+		}
+		.leaflet-popup-tip {
+			background:red;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h2><font color = 'black'>Gestión Campos de Oliveras. Estudio Datos Lidar</font></h2>
+	</header>
+
+	<aside>
+			<h3><u>Descripción Estudio</h3></u><br>
+			<small><i>En este trabajo se compararon la altura total y de copa, diámetro de copa y de tronco de un conjunto
+			de olivos a partir de  imágenes tomadas desde un dron y datos LiDAR del sistema aéreo. <br>
+			Para ello, se seleccionaron 40 olivos en dos parcelas del término municipal de Viver (Castellón, España). <br>
+			Se aplicaron algoritmos Structure From Motion (sfm) sobre las imágenes tomadas desde un dron para la generación de las nubes
+			de puntos 3D. A partir de estos datos (nubes de puntos LiDAR y dron) se obtuvieron los siguientes parámetros para cada árbol:
+			área y diámetros de copas, elevaciones máximas, mínimas, medias y desviación estándar de los puntos de las copas.
+			Destacar los resultados obtenidos en la altura total y el diámetro de copa derivada de las nubes de puntos SFM con valores de R2
+			de 0,83 en ambos casos. Además, se observó una mejora significativa en la precisión  de las alturas totales y de copa de los olivos
+			utilizando datos SFM en comparación al sistema LiDAR aéreo. Los datos del sistema LiDAR aéreo de baja densidad generaron buenos
+			resultados especialmente en la estimación del diámetro de tronco.</i></small>
+		<footer>
+			<small><font color='black'>Para obtener la información de una olivera, pulsar sobre la copa de la misma.<br><br>
+			Podemos obtener información de la parcela catastral sobre la que se ubica, pulsando sobre la parcela.</small></font>
+		</footer>
+	</aside>
+
+<!-- Plugin para medición -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.3.2/leaflet.draw.js"></script>
+	<script src="Plugins/leaflet-measure.js"></script>
+
+<!-- Plugin para llamar a PNOA -->
+	<script src="Plugins/Leaflet.Spain.WMS.js"></script>
+	<script src="Plugins/leaflet.wms.js"></script>
+<!-- Plugin para Impresión -->
+	<script src="Plugins/bundle.js"></script>
+
+<!-- Cargamos Esri Leaflet -->
+		<script src="https://unpkg.com/esri-leaflet@2.2.3/dist/esri-leaflet.js"></script>
+		<script src="Plugins/leaflet.shpfile.js"></script>
+		<script src="Plugins/shp.js"></script>
+		<script src="Plugins/leaflet-providers.js"></script>
+
+<!-- Cargamos Geotiff -->
+     <script src = " //npmcdn.com/leaflet@1.2.0/dist/leaflet.js "> </script>
+     <script src = " //cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.4/chroma.min.js " > </script>
+     <script src = " //d3js.org/d3.v4.min.js " > </script>
+     <script src = " //npmcdn.com/geotiff@0.3.6/dist/geotiff.js "> </script >
+
+     <script src = " https://ihcantabria.github.io/Leaflet.CanvasLayer.Field/dist/leaflet.canvaslayer.field.js " > </script>
+
+	<div id="map"></div>
+
+	<script>
+		var map = L.map('map', {center: [39.9233, -0.6139],zoom: 15, zoomControl:false});
+		var inicial = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+		var zoomHome = L.Control.zoomHome();
+			zoomHome.addTo(map);
+
+		// CATASTRO/PARCELARIO layers
+		var Spain_Catastro = L.tileLayer.wms('http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx', {
+			layers: 'catastro',
+			format: 'image/png',
+			transparent: false,
+			continuousWorld : true,
+			attribution: ' <a href="http://www.catastro.meh.es/" target="_blank">DirecciÃ³n General del Catastro</a>'
+		});
+		//Topografico
+		var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {maxZoom: 17,
+			attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+		});
+		// Campos de Oliveras
+
+		var Campo1 = new L.Shapefile('OLIVERAS1.zip',{
+			onEachFeature: function(feature,marker) {
+			marker.bindPopup("<h3>Arbol número:" +feature.properties.Cod_Arbol+"</h3><i><b>Diametro:</b>"+feature.properties.Avg_CHM+" m <br><b>Area:</b>"
+			+feature.properties.Shape_Area+" m2<br><b> Perímetro:"+feature.properties.Shape_Leng+" m <b><br><b>Número Ptos. Lidar:"+feature.properties.Count_+"</i><b>");
+		}});
+
+		var Campo2 = new L.Shapefile('OLIVERAS2.zip',{
+			onEachFeature: function(feature,marker) {
+			marker.bindPopup("<h3>Arbol número:" +feature.properties.Cod_Arbol+"</h3><i><b>Diametro:</b>"+feature.properties.Avg_CHM+" m <br><b>Area:</b>"
+			+feature.properties.AREA+" m2<br><b> Perímetro:"+feature.properties.PERIMETRO+" m <b><br><b>Número Ptos. Lidar:"+feature.properties.Count_+"</i><b>");
+		}});
+
+
+		// GeoTIFF
+		var tiff = "http://127.0.0.1:8080/TEMPERATURAS.tif";
+			fetch(tiff).then(r => r.arrayBuffer()).then(function(buffer) {
+			var s = L.ScalarField.fromGeoTIFF(buffer);
+					let layer = L.canvasLayer.scalarField(s).addTo(map);
+						layer.on("click", function(e) {
+						if (e.value !== null) {
+						  let popup = L.popup()
+						  .setLatLng(e.latlng)
+						  .setContent(`${e.value}`)
+						  .openOn(map);
+						}
+		});
+
+		// Menu de capas
+		var baseMaps = [{
+		groupName : "IGN Base",
+		layers : {
+				"Ortoimagen" : Spain_PNOA_Ortoimagen,
+				"Base": Spain_IGNBase,
+				}
+		}, {
+
+		groupName : "Catastro/DGC",
+		layers : {
+			"Parcelario" :Spain_Catastro,
+			}
+		}, {
+
+		groupName : "Topografico",
+		layers : {
+			"Topografico" :OpenTopoMap,
+			}
+		}];
+
+		var overlays = [{
+		groupName : "Oliveras",
+		layers : {
+			"Campo 1" : Campo1,
+			"Campo 2": Campo2
+			}
+		}];
+
+		var options = {
+			container_width : "300px",
+			group_maxHeight : "80px",
+			exclusive : false,
+			collapsed : true,
+			position: 'topright'
+			};
+		var control = L.Control.styledLayerControl(baseMaps, overlays, options);
+			map.addControl(control);
+
+			//var activa = control.getActiveOverlayLayers();
+			//document.getElementByname("activa").onclick = function () {
+			//map.fitBounds(Campo1.getBounds())};
+
+		var measureControl = new L.Control.Measure({
+			position:'topleft',
+			primaryLengthUnit: 'meters',
+			secondaryLengthUnit: 'kilometers',
+			primaryAreaUnit:'hectares',
+			activeColor: 'red',
+			completedColor: 'blue'
+		});
+		measureControl.addTo(map);
+
+		var printer = L.easyPrint({
+					  tileLayer: inicial,
+					  sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
+					  filename: 'myMap',
+					  exportOnly: true,
+					  hideControlContainer: true
+		}).addTo(map);
+
+		var osm2 = new L.TileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+		var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, zoomLevelOffset: -8 }).addTo(map);
+
+		var position= new L.Control.MousePosition({position:'bottomleft', separator:'--', prefix:'Coordenadas Lat--Lon : '}).addTo(map);
+
+		var escala = L.control.scale({ position: 'bottomleft', metric: true, maxWidth: 200}).addTo(map);
+
+		var zoomBox = L.Control.boxzoom({ position:'topleft' }).addTo(map);
+
+		var source = L.WMS.source('https://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?', {
+			opacity: 0.1,
+			info_format: "text/html"
+		});
+		source.getLayer("PARCELA").addTo(map);
+
+	</script>
+<div style="text-align: right;position: fixed;z-index:9999999;bottom: 0;width: auto;right: 1%;cursor: pointer;line-height: 0;display:block !important;"><a title="Hosted on free web hosting 000webhost.com. Host your own website for FREE." target="_blank" href="https://www.000webhost.com/?utm_source=000webhostapp&utm_campaign=000_logo&utm_medium=website&utm_content=footer_img"><img src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png" alt="www.000webhost.com"></a></div><script>function getCookie(t){for(var e=t+"=",n=decodeURIComponent(document.cookie).split(";"),o=0;o<n.length;o++){for(var i=n[o];" "==i.charAt(0);)i=i.substring(1);if(0==i.indexOf(e))return i.substring(e.length,i.length)}return""}getCookie("hostinger")&&(document.cookie="hostinger=;expires=Thu, 01 Jan 1970 00:00:01 GMT;",location.reload());var wordpressAdminBody=document.getElementsByClassName("wp-admin")[0],notification=document.getElementsByClassName("notice notice-success is-dismissible"),hostingerLogo=document.getElementsByClassName("hlogo"),mainContent=document.getElementsByClassName("notice_content")[0];if(null!=wordpressAdminBody&&notification.length>0&&null!=mainContent){var googleFont=document.createElement("link");googleFontHref=document.createAttribute("href"),googleFontRel=document.createAttribute("rel"),googleFontHref.value="https://fonts.googleapis.com/css?family=Roboto:300,400,600",googleFontRel.value="stylesheet",googleFont.setAttributeNode(googleFontHref),googleFont.setAttributeNode(googleFontRel);var css="@media only screen and (max-width: 576px) {#main_content {max-width: 320px !important;} #main_content h1 {font-size: 30px !important;} #main_content h2 {font-size: 40px !important; margin: 20px 0 !important;} #main_content p {font-size: 14px !important;} #main_content .content-wrapper {text-align: center !important;}} @media only screen and (max-width: 781px) {#main_content {margin: auto; justify-content: center; max-width: 445px;}} @media only screen and (max-width: 1325px) {.web-hosting-90-off-image-wrapper {position: absolute; max-width: 95% !important;} .notice_content {justify-content: center;} .web-hosting-90-off-image {opacity: 0.3;}} @media only screen and (min-width: 769px) {.notice_content {justify-content: space-between;} #main_content {margin-left: 5%; max-width: 445px;} .web-hosting-90-off-image-wrapper {position: absolute; right: 0; display: flex; padding: 0 5%}} .web-hosting-90-off-image {max-width: 90%; margin-top: 20px;} .content-wrapper {z-index: 5} .notice_content {display: flex; align-items: center;} * {-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;} .upgrade_button_red_sale{box-shadow: 0 2px 4px 0 rgba(255, 69, 70, 0.2); max-width: 350px; border: 0; border-radius: 3px; background-color: #ff4546 !important; padding: 15px 55px !important;  margin-bottom: 48px; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 600; color: #ffffff;} .upgrade_button_red_sale:hover{color: #ffffff !important; background: #d10303 !important;}",style=document.createElement("style"),sheet=window.document.styleSheets[0];style.styleSheet?style.styleSheet.cssText=css:style.appendChild(document.createTextNode(css)),document.getElementsByTagName("head")[0].appendChild(style),document.getElementsByTagName("head")[0].appendChild(googleFont);var button=document.getElementsByClassName("upgrade_button_red")[0],link=button.parentElement;link.setAttribute("href","https://www.hostinger.com/hosting-starter-offer?utm_source=000webhost&utm_medium=panel&utm_campaign=000-wp"),link.innerHTML='<button class="upgrade_button_red_sale">TRANSFER NOW</button>',(notification=notification[0]).setAttribute("style","padding-bottom: 0; padding-top: 5px; background: url(https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-bg.jpg); background-size: cover; background-repeat: no-repeat; color: #ffffff; border-color: #ff123a; border-width: 8px;"),notification.className="notice notice-error is-dismissible";var mainContentHolder=document.getElementById("main_content");mainContentHolder.setAttribute("style","padding: 0;"),hostingerLogo[0].remove();var h1Tag=notification.getElementsByTagName("H1")[0];h1Tag.className="000-h1",h1Tag.innerHTML="Cyber Monday Sale",h1Tag.setAttribute("style",'color: white;  margin-top: 48px; font-family: "Roboto", sans-serif; font-size: 48px; font-weight: 600;');var h2Tag=document.createElement("H2");h2Tag.innerHTML="Get 90% Off!",h2Tag.setAttribute("style",'color: white; margin: 45px 0; font-family: "Roboto", sans-serif; font-size: 80px; font-weight: 600;'),h1Tag.parentNode.insertBefore(h2Tag,h1Tag.nextSibling);var paragraph=notification.getElementsByTagName("p")[0];paragraph.innerHTML="Don’t miss the opportunity to enjoy up to <strong>4x WordPress Speed, Free SSL and all premium features</strong> available for a fraction of the price!",paragraph.setAttribute("style",'font-family: "Roboto", sans-serif; font-size: 18px; font-weight: 300;');var list=notification.getElementsByTagName("UL")[0];list.remove();var org_html=mainContent.innerHTML,new_html='<div class="content-wrapper">'+mainContent.innerHTML+'</div><div class="web-hosting-90-off-image-wrapper"><img class="web-hosting-90-off-image" src="https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-img.png"></div>';mainContent.innerHTML=new_html;var saleImage=mainContent.getElementsByClassName("web-hosting-90-off-image")[0]}</script></body>
+</html>

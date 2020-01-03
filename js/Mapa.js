@@ -36,6 +36,19 @@ class Mapa{
           feature.properties.Shape_Area + " m2<br><b> Perímetro:" + feature.properties.Shape_Leng + "m");
       }
     });
+    var tiff = "http://127.0.0.1:8080/TEMPERATURAS.tif";
+      fetch(tiff).then(r => r.arrayBuffer()).then(function(buffer) {
+      var s = L.ScalarField.fromGeoTIFF(buffer);
+          let layer = L.canvasLayer.scalarField(s).addTo(map);
+            layer.on("click", function(e) {
+            if (e.value !== null) {
+              let popup = L.popup()
+              .setLatLng(e.latlng)
+              .setContent(`${e.value}`)
+              .openOn(map);
+            }})});
+
+
 
     // Menu de capas
     var baseMaps = [{
