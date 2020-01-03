@@ -7,7 +7,11 @@ class MapaTif{
     inicializar( idMapa ){
 
 
-      var mymap = L.map(idMapa).setView([35, -3], 5);
+      var mymap = L.map( idMapa, {
+        center: [38.972, -0.303],
+        zoom: 12,
+        zoomControl: false
+      });
 
 
       let url = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
@@ -49,14 +53,6 @@ class MapaTif{
       });
       measureControl.addTo(mymap);
 
-      var printer = L.easyPrint({
-        tileLayer: inicial,
-        sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
-        filename: 'myMap',
-        exportOnly: true,
-        hideControlContainer: true
-      }).addTo(mymap);
-
       var osm2 = new L.TileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
       var miniMap = new L.Control.MiniMap(osm2, {
         toggleDisplay: true,
@@ -75,15 +71,6 @@ class MapaTif{
         maxWidth: 200
       }).addTo(mymap);
 
-      var zoomBox = L.Control.boxzoom({
-        position: 'topleft'
-      }).addTo(mymap);
-
-      var source = L.WMS.source('https://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?', {
-        opacity: 0.1,
-        info_format: "text/html"
-      });
-      source.getLayer("PARCELA").addTo(mymap);
     }
 
 }
