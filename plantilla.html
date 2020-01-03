@@ -4,7 +4,6 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Control de capas personalizado</title>
-<!-- Plugin para Leaflet -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
 	<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
 
@@ -91,7 +90,6 @@
 		<!-- Masthead -->
 	  <header class="jumbotron jumbotron-fluid">
 	  </header>
-<!-- Plugin para medición -->
 
 
     <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
@@ -99,46 +97,17 @@
       <script src="https://npmcdn.com/geotiff@0.3.6/dist/geotiff.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.0/chroma.min.js"></script>
       <script src="https://npmcdn.com/leaflet@1.2.0/dist/leaflet.js"></script>
-      <script src="https://d3js.org/d3-request.v1.min.js"></script>
       <!-- Plugin -->
       <script src="https://ihcantabria.github.io/Leaflet.CanvasLayer.Field/dist/leaflet.canvaslayer.field.js"></script>
       <div id="mapa"> </div>
+
+			<script src="js/mapaTIFF.js"></script>
       <script>
 
-      var mymap = L.map('mapa').setView([35, -3], 5);
 
-      /* Dark basemap */
-      let url = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png';
+			var mapaTif = new MapaTif();
 
-
-      L.tileLayer(url, {
-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          subdomains: 'abcd'
-      }).addTo(mymap);
-
-
-  	// Geotiff
-  	//d3.text("https://cursoleafletmarti.000webhostapp.com/TEMPERATURAS.tif", function (asc) {
-
-  	// GeoTIFF
-  	var tiff = "http://127.0.0.1:8080/TEMPERATURAS.tif";
-  		fetch(tiff).then(r => r.arrayBuffer()).then(function(buffer) {
-  		var s = L.ScalarField.fromGeoTIFF(buffer);
-  		let layer = L.canvasLayer.scalarField(s).addTo(mymap);
-  		layer.on("click", function(e) {
-  			if (e.value !== null) {
-  			let popup = L.popup()
-  			  .setLatLng(e.latlng)
-  			  .setContent(`${e.value}`)
-  			  .openOn(mymap);
-  			}
-  	});
-
-    mymap.fitBounds(layer.getBounds());
-  });
-
-
-
+			mapaTif.inicializar('mapa');
 
 
       </script>
