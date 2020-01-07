@@ -30,21 +30,18 @@ class Mapa{
     });
     // Campos de Oliveras
 
-    var Campo1 = new L.Shapefile('Corine_incendio_shp.zip', {
+    var Incendio = new L.Shapefile('Corine_incendio_shp.zip', {
       onEachFeature: function(feature, marker) {
-        marker.bindPopup("<h3>Area en ha: " + feature.properties.AREA_HA + "</h3><i><b>Descripcion:</b>" + feature.properties.DESC_ + "<br><b>Area:</b>" +
+        marker.bindPopup("<h5>Area en ha: " + feature.properties.AREA_HA + "</h5><i><b>Descripcion:</b>" + feature.properties.DESC_ + "<br><b>Area:</b>" +
           feature.properties.Shape_Area + " m2<br><b> Perímetro:" + feature.properties.Shape_Leng + "m");
       }
     });
 
-    var Campo2 = new L.Shapefile('combinacion.zip', {
+    var Precipitaciones = new L.Shapefile('combinacion.zip', {
       onEachFeature: function(feature, marker) {
-        marker.bindPopup("<h3>Area en ha: " + feature.properties.AREA_HA + "</h3><i><b>Descripcion:</b>" + feature.properties.DESC_ + "<br><b>Area:</b>" +
-          feature.properties.Shape_Area + " m2<br><b> Perímetro:" + feature.properties.Shape_Leng + "m");
+        marker.bindPopup("<h6>Area: " + feature.properties.Area + "</h6><i><b>Perimetro: </b>" + feature.properties.Perimetro);
       }
     });
-
-
 
 
 
@@ -70,10 +67,10 @@ class Mapa{
     }];
 
     var overlays = [{
-      groupName: "Incendios(shp)",
+      groupName: "Capas vectoriales",
       layers: {
-        "Incendio 1": Campo1,
-        "Incendio 2": Campo2,
+        "Incendio 1": Incendio,
+        "Incendio 2": Precipitaciones,
       }
     }];
 

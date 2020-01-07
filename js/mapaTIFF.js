@@ -98,7 +98,7 @@ class MapaTif {
     var zoomHome = L.Control.zoomHome();
     zoomHome.addTo(mymap);
 
-    var tiff = "http://127.0.0.1:8080/CORINE_INCENDIO%20(1).tif";
+    var tiff = "http://127.0.0.1:8080/Precipitaciones.tif";
     fetch(tiff).then(r => r.arrayBuffer()).then(function(buffer) {
       var s = L.ScalarField.fromGeoTIFF(buffer);
       let layer = L.canvasLayer.scalarField(s, {
