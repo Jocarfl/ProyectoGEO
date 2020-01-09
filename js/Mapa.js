@@ -23,12 +23,14 @@ class Mapa{
       attribution: ' <a href="http://www.catastro.meh.es/" target="_blank">DirecciÃ³n General del Catastro</a>'
     });
 
-    //Topografico
-    var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-      maxZoom: 17,
-      attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    var OpenStreetMap_DE = L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+    	maxZoom: 18,
+    	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
-    // Campos de Oliveras
+
+    var MtbMap = L.tileLayer('http://tile.mtbmap.cz/mtbmap_tiles/{z}/{x}/{y}.png', {
+	     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &amp; USGS'
+    });
 
     var Incendio = new L.Shapefile('Corine_incendio_shp.zip', {
       onEachFeature: function(feature, marker) {
@@ -46,31 +48,37 @@ class Mapa{
 
 
     // Menu de capas
-    var baseMaps = [{
+    var baseMaps = [
+      {
+
+        groupName: "Catastro/DGC",
+        layers: {
+          "Parcelario": Spain_Catastro,
+        }
+      },
+      {
+        groupName: "MtbMap",
+        layers: {
+          "MtbMap": MtbMap,
+        }
+      }, {
       groupName: "IGN Base",
       layers: {
         "Ortoimagen": Spain_PNOA_Ortoimagen,
         "Base": Spain_IGNBase,
       }
-    }, {
-
-      groupName: "Catastro/DGC",
+    },{
+      groupName: "Mapa de carreteras",
       layers: {
-        "Parcelario": Spain_Catastro,
-      }
-    }, {
-
-      groupName: "Topografico",
-      layers: {
-        "Topografico": OpenTopoMap,
+        "Mapa de carreteras": OpenStreetMap_DE,
       }
     }];
 
     var overlays = [{
       groupName: "Capas vectoriales",
       layers: {
-        "Incendio 1": Incendio,
-        "Incendio 2": Precipitaciones,
+        "Incendio": Incendio,
+        "Precipitaciones": Precipitaciones,
       }
     }];
 
@@ -81,6 +89,7 @@ class Mapa{
       collapsed: true,
       position: 'topright'
     };
+
     var control = L.Control.styledLayerControl(baseMaps, overlays, options);
     map.addControl(control);
 
